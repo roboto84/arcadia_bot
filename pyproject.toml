@@ -1,0 +1,18 @@
+[tool.poetry]
+name = 'arcadia_bot'
+version = '0.1.0'
+description = ''
+authors = ['roboto84 <7658704+roboto84@users.noreply.github.com>']
+
+[tool.poetry.dependencies]
+python = '^3.9'
+python-dotenv = '^0.15.0'
+wh00t-core = {git = 'https://github.com/roboto84/wh00t_core.git', tag = 'v0.4.2'}
+arcadia = {git = 'https://github.com/roboto84/arcadia.git', rev = '2c2d058'}
+
+[tool.poetry.dev-dependencies]
+pytest = '^5.2'
+
+[build-system]
+requires = ['poetry-core>=1.0.0']
+build-backend = 'poetry.core.masonry.api'
