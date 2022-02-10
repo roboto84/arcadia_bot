@@ -28,17 +28,44 @@ class ArcadiaBot:
         if ('id' in package) and (package['id'] not in ['wh00t_server', 'arcadia_bot']) and ('message' in package):
             if 'category' in package and package['category'] == 'chat_message' and \
                     isinstance(package['message'], str) and package['message'].find(self._chat_key) == 0:
-                search_term: str = package['message'].replace(self._chat_key, '').rstrip()
-                if search_term != '':
-                    self._send_chat_data(search_term.strip())
+                command_term: str = package['message'].replace(self._chat_key, '').rstrip()
+                if command_term != '':
+                    self._command_handler(command_term.strip())
                 else:
                     self._socket_network.send_message('chat_message', ArcadiaBotUtils.arcadia_bot_help_message())
         return True
 
-    def _send_chat_data(self, search_term: str):
+    def _command_handler(self, command_sequence: str) -> None:
+        command_list: list[str] = command_sequence.split(' ')
+        arc_command: str = command_list[0]
+        arc_command_params: list[str] = command_list[1:]
+
+        if arc_command == 'search':
+            self._send_arc_data(' '.join(arc_command_params).strip())
+        elif arc_command == 'add':
+            self._add_arc_data(arc_command_params)
+        else:
+            self._socket_network.send_message('chat_message', ArcadiaBotUtils.arcadia_bot_help_message())
+
+    def _send_arc_data(self, search_term: str):
         self._socket_network.send_message('chat_message', f'Ok, searching "{search_term}" 🤔')
         arcadia_summary: str = self._arcadia.get_summary(search_term)
         self._socket_network.send_message('chat_message', f'\n{arcadia_summary}')
+
+    def _add_arc_data(self, add_term: list[str]):
+        self._socket_network.send_message('chat_message', f'Ok, adding "{add_term[1]}" 🤔')
+        arc_package: dict = {
+            'data_type': add_term[0],
+            'content': add_term[1],
+            'tags': add_term[2].split(',')
+        }
+
+        add_item_result: bool = self._arcadia.add_item(arc_package)
+        if add_item_result:
+            self._socket_network.send_message('chat_message', f'Added record "{arc_package["content"]}" successfully')
+        else:
+            self._socket_network.send_message('chat_message', f'Failed to add record "{arc_package["content"]}" '
+                                                              f'{ArcadiaBotUtils.arcadia_bot_help_message()}')
 
 
 if __name__ == '__main__':

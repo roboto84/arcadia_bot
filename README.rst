@@ -2,7 +2,7 @@
 arcadia_bot
 =================
 
-
+Chat bot created to bridge information flow between the Arcadia project and the Wh00t messaging app
 
 Commit Conventions
 ----------------------
