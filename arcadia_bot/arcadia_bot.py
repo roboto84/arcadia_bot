@@ -54,18 +54,26 @@ class ArcadiaBot:
 
     def _add_arc_data(self, add_term: list[str]):
         self._socket_network.send_message('chat_message', f'Ok, adding "{add_term[1]}" 🤔')
-        arc_package: dict = {
-            'data_type': add_term[0],
-            'content': add_term[1],
-            'tags': add_term[2].split(',')
-        }
+        acceptable_data_types = ['hyperlink'];
+        if add_term[0] in acceptable_data_types:
+            arc_package: dict = {
+                'data_type': add_term[0],
+                'content': add_term[1],
+                'tags': add_term[2].split(',')
+            }
 
-        add_item_result: bool = self._arcadia.add_item(arc_package)
-        if add_item_result:
-            self._socket_network.send_message('chat_message', f'Added record "{arc_package["content"]}" successfully')
+            add_item_result: bool = self._arcadia.add_item(arc_package)
+            if add_item_result:
+                self._socket_network.send_message('chat_message', f'Added record "{arc_package["content"]}" successfully')
+            else:
+                self._socket_network.send_message('chat_message', f'Failed to add record "{arc_package["content"]}" '
+                                                                  f'{ArcadiaBotUtils.arcadia_bot_help_message()}')
         else:
-            self._socket_network.send_message('chat_message', f'Failed to add record "{arc_package["content"]}" '
-                                                              f'{ArcadiaBotUtils.arcadia_bot_help_message()}')
+            data_type_not_found_message: str = f'\n\n{{data_type}} "{add_term[0]}" was not acceptable. ' \
+                                               f'Command parameters may be missing or disordered. ' \
+                                               f'\nAcceptable data types are:\n\n  {acceptable_data_types}\n\n' \
+                                               f'{ArcadiaBotUtils.arcadia_bot_help_message()}'
+            self._socket_network.send_message('chat_message', data_type_not_found_message)
 
 
 if __name__ == '__main__':
