@@ -54,7 +54,7 @@ class ArcadiaBot:
 
     def _add_arc_data(self, add_term: list[str]):
         self._socket_network.send_message('chat_message', f'Ok, adding "{add_term[1]}" 🤔')
-        acceptable_data_types = ['hyperlink'];
+        acceptable_data_types = ['hyperlink']
         if add_term[0] in acceptable_data_types:
             arc_package: dict = {
                 'data_type': add_term[0],
@@ -87,7 +87,7 @@ if __name__ == '__main__':
         SOCKET_SERVER_PORT: int = int(os.getenv('SOCKET_SERVER_PORT'))
         SQL_LITE_DB: str = os.getenv('SQL_LITE_DB')
 
-        print(f'\nLexicon data sender will now continuously run')
+        print(f'\nArcadia bot will now run continuously...')
         arcadia_bot: ArcadiaBot = ArcadiaBot(
             logging,
             HOST_SERVER_ADDRESS,
