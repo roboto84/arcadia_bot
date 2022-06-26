@@ -64,7 +64,8 @@ class ArcadiaBot:
 
             add_item_result: bool = self._arcadia.add_item(arc_package)
             if add_item_result:
-                self._socket_network.send_message('chat_message', f'Added record "{arc_package["content"]}" successfully')
+                self._socket_network.send_message('chat_message', f'Added record "{arc_package["content"]}" '
+                                                                  f'successfully')
             else:
                 self._socket_network.send_message('chat_message', f'Failed to add record "{arc_package["content"]}" '
                                                                   f'{ArcadiaBotUtils.arcadia_bot_help_message()}')
