@@ -48,12 +48,10 @@ class ArcadiaBot:
             self._socket_network.send_message('chat_message', ArcadiaBotUtils.arcadia_bot_help_message())
 
     def _send_arc_data(self, search_term: str):
-        self._socket_network.send_message('chat_message', f'Ok, searching "{search_term}" 🤔')
         arcadia_summary: str = self._arcadia.get_summary(search_term)
-        self._socket_network.send_message('chat_message', f'\n{arcadia_summary}')
+        self._socket_network.send_message('chat_message', f'{arcadia_summary}')
 
     def _add_arc_data(self, add_term: list[str]):
-        self._socket_network.send_message('chat_message', f'Ok, adding "{add_term[1]}" 🤔')
         acceptable_data_types = ['hyperlink']
         if add_term[0] in acceptable_data_types:
             arc_package: dict = {
