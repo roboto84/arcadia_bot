@@ -14,8 +14,8 @@ willow-core = {git = 'https://github.com/roboto84/willow_core.git', rev = '59d8f
 [package.source]
 type = "git"
 url = 'https://github.com/roboto84/arcadia.git'
-reference = 'a47e4a0'
-resolved_reference = "a47e4a0b536ecdb8aa06c2f34ba71744b5e354b4"
+reference = 'e7fb68e'
+resolved_reference = "e7fb68ecb354ca3074bbcf80eb3e04225ac7d136"
 
 [[package]]
 name = "atomicwrites"
@@ -170,7 +170,7 @@ resolved_reference = "59d8f44bce1bbda74e6e6d82a179a78f36cdfb3c"
 [metadata]
 lock-version = "1.1"
 python-versions = '^3.10'
-content-hash = "a7162ad67086488f2b25ffefc2c84ed6a1bf66168786ad04fbc9712346fc4cc0"
+content-hash = "d2a7e3c7b5d015881ace5b6fc90b4c054e924a3a57578762dbbcbecb5e0f7c3f"
 
 [metadata.files]
 arcadia = []
