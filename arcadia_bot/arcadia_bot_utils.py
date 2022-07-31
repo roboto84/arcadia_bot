@@ -1,9 +1,25 @@
+import validators
+
 
 class ArcadiaBotUtils:
     @staticmethod
     def arcadia_bot_help_message() -> str:
         return f'  🤔\n\nDoesn\'t look like you gave me a good command ...\n\n' \
-               f'Commands are as follows:\n' \
-               f'     /arc search {{term_to_search}} : gives summary of data on the term\n' \
-               f'     /arc add {{data_type}} {{single_string_data_content}} {{comma_separated_data_tags}}: ' \
-               f'adds data to arcadia, tags are COMMA SEPERATED tags with NO SPACES\n\n'
+               f'Commands are as follows:\n\n' \
+               f'     `/arc tags` : prints out full list of arcadia tags\n' \
+               f'     `/arc {{single_word_term_to_search}}` : searches tags for search term\n' \
+               f'     `/arc {{URL}} {{comma_separated_data_tags}}`: ' \
+               f'adds URL to arcadia, URL must be VALID, and tags must be COMMA SEPERATED tags with NO SPACES\n\n'
+
+    @staticmethod
+    def validate_url(url: str) -> bool:
+        return validators.url(url)
+
+    @staticmethod
+    def arcadia_subjects_dictionary_view(subject_dictionary: dict[str:list[str]]) -> str:
+        subject_dictionary_str: str = ''
+        for key in subject_dictionary:
+            if len(subject_dictionary[key]) > 0:
+                subject_dictionary_str += f'*{key}*: ' \
+                                          f'{"".join(f"{tag}, " for tag in subject_dictionary[key]).rstrip(", ")}\n\n'
+        return subject_dictionary_str
