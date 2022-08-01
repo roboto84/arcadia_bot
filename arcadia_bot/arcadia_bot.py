@@ -40,20 +40,33 @@ class ArcadiaBot:
     def _command_handler(self, command_sequence: str) -> None:
         command_list: list[str] = command_sequence.split(' ')
 
-        if len(command_list) == 1 and command_list[0].strip() == 'tags':
-            self._get_arc_tags()
-        elif len(command_list) == 1:
-            self._search_arc_data(command_list[0].strip())
+        if len(command_list) == 1:
+            if command_list[0].strip() == 'tags':
+                self._get_arc_tags()
+            else:
+                self._search_arc_data(command_list[0].strip())
         elif len(command_list) == 2:
-            self._add_arc_data(command_list)
+            if command_list[0].strip() == 'tags':
+                self._get_arc_tags(command_list[1])
+            else:
+                self._add_arc_data(command_list)
         else:
             self._socket_network.send_message('chat_message', ArcadiaBotUtils.arcadia_bot_help_message())
 
-    def _get_arc_tags(self) -> None:
-        arcadia_subjects: str = ArcadiaBotUtils.arcadia_subjects_dictionary_view(
-            self._arcadia.get_subjects_dictionary()
-        )
-        self._socket_network.send_message('chat_message', f'{arcadia_subjects}')
+    def _get_arc_tags(self, search_tag: str = '') -> None:
+        if search_tag:
+            subjects_list: list[str] = self._arcadia.get_subjects().split(',')
+            arcadia_subjects: str = ''.join(
+                (f'{tag}, ' if search_tag in tag else '') for tag in subjects_list
+            ).rstrip(', ')
+            arcadia_subjects_view: str = f'*\'{search_tag}\' is in the following tags:*\n\n' \
+                                         f'     [{arcadia_subjects}]'
+        else:
+            arcadia_subjects: str = ArcadiaBotUtils.arcadia_subjects_dictionary_view(
+                self._arcadia.get_subjects_dictionary()
+            )
+            arcadia_subjects_view: str = f'*Arcadia Tags Dictionary*\n\n{arcadia_subjects}'
+        self._socket_network.send_message('chat_message', f'{arcadia_subjects_view}')
 
     def _search_arc_data(self, search_term: str) -> None:
         arcadia_summary: str = self._arcadia.get_summary(search_term)
@@ -62,7 +75,7 @@ class ArcadiaBot:
     def _add_arc_data(self, add_term: list[str]) -> None:
         if ArcadiaBotUtils.validate_url(add_term[0]):
             arc_package: ItemPackage = {
-                'data_type': ArcadiaDataType.HYPERLINK,
+                'data_type': ArcadiaDataType.URL,
                 'content': add_term[0],
                 'tags': add_term[1].split(',')
             }
@@ -72,7 +85,7 @@ class ArcadiaBot:
                 self._socket_network.send_message(
                     'chat_message',
                     f'Added record "{arc_package["content"]}" '
-                    f'successfully under ({"".join(f"{tag}, " for tag in arc_package["tags"]).rstrip(", ")})')
+                    f'successfully under [{"".join(f"{tag}, " for tag in arc_package["tags"]).rstrip(", ")}]')
             elif not add_item_result['added_item'] and add_item_result['reason'] == 'item_duplicate':
                 self._socket_network.send_message(
                     'chat_message',
