@@ -161,7 +161,7 @@ test = ["pytest (>=2.2.3)", "flake8 (>=2.4.0)", "isort (>=4.2.2)"]
 
 [[package]]
 name = "wh00t-core"
-version = "0.4.5"
+version = "0.5.0"
 description = 'Core libraries shared amongst the wh00t connected projects'
 category = "main"
 optional = false
@@ -171,8 +171,8 @@ develop = false
 [package.source]
 type = "git"
 url = 'https://github.com/roboto84/wh00t_core.git'
-reference = 'v0.4.5'
-resolved_reference = "36a37cfffe53ce903ea3ccbd2529997bc9c70a6e"
+reference = 'v0.5.0'
+resolved_reference = "2496591f4a8013cab458e5609532f650941658cd"
 
 [[package]]
 name = "willow-core"
@@ -192,7 +192,7 @@ resolved_reference = "59d8f44bce1bbda74e6e6d82a179a78f36cdfb3c"
 [metadata]
 lock-version = "1.1"
 python-versions = '^3.10'
-content-hash = "07c40207a9fa90a3e22cefea43cd1359f3722432618f1655bd2d940e378be34d"
+content-hash = "7f3df4bd7ba396f1eb7d730cef797d583bf1725505c315fcf2ce9d193a199515"
 
 [metadata.files]
 arcadia = []

@@ -9,8 +9,8 @@ class ArcadiaBotUtils:
                f'     `/arc tags` : prints out full list of arcadia tags\n' \
                f'     `/arc tags {{tag_search_term}}` : prints tags with search term in it\n' \
                f'     `/arc {{single_word_tag_to_search}}` : returns data associated to the searched tag\n' \
-               f'     `/arc {{URL}} {{comma_separated_data_tags}}`: ' \
-               f'adds URL to arcadia, URL must be VALID, and tags must be COMMA SEPERATED tags with NO SPACES\n\n'
+               f'     `/arc {{comma_separated_data_tags}} {{URL}}`: ' \
+               f'adds URL to arcadia, tags must be _COMMA SEPERATED_ tags with _NO SPACES_, and URL must be _VALID_\n\n'
 
     @staticmethod
     def validate_url(url: str) -> bool:

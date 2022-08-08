@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from arcadia.library.arcadia import Arcadia
 from arcadia_bot_utils import ArcadiaBotUtils
 from wh00t_core.library.client_network import ClientNetwork
+from wh00t_core.library.network_commons import NetworkCommons
 
 
 class ArcadiaBot:
@@ -17,6 +18,7 @@ class ArcadiaBot:
         self._chat_key: str = '/arc'
         self._arcadia: Arcadia = Arcadia(logging_object, sql_lite_db_path, True)
         self._socket_network: ClientNetwork = ClientNetwork(socket_host, socket_port, 'arcadia_bot', 'app', logging)
+        self._network_commons: NetworkCommons = NetworkCommons()
 
     def run_bot(self) -> None:
         try:
@@ -28,13 +30,16 @@ class ArcadiaBot:
 
     def _receive_message_callback(self, package: dict) -> bool:
         if ('id' in package) and (package['id'] not in ['wh00t_server', 'arcadia_bot']) and ('message' in package):
-            if 'category' in package and package['category'] == 'chat_message' and \
+            if 'category' in package and package['category'] == self._network_commons.get_chat_message_category() and \
                     isinstance(package['message'], str) and package['message'].find(self._chat_key) == 0:
                 command_term: str = package['message'].replace(self._chat_key, '').rstrip()
                 if command_term != '':
                     self._command_handler(command_term.strip())
                 else:
-                    self._socket_network.send_message('chat_message', ArcadiaBotUtils.arcadia_bot_help_message())
+                    self._socket_network.send_message(
+                        self._network_commons.get_chat_message_category(),
+                        ArcadiaBotUtils.arcadia_bot_help_message()
+                    )
         return True
 
     def _command_handler(self, command_sequence: str) -> None:
@@ -51,7 +56,10 @@ class ArcadiaBot:
             else:
                 self._add_arc_data(command_list)
         else:
-            self._socket_network.send_message('chat_message', ArcadiaBotUtils.arcadia_bot_help_message())
+            self._socket_network.send_message(
+                self._network_commons.get_chat_message_category(),
+                ArcadiaBotUtils.arcadia_bot_help_message()
+            )
 
     def _get_arc_tags(self, search_tag: str = '') -> None:
         if search_tag:
@@ -66,40 +74,53 @@ class ArcadiaBot:
                 self._arcadia.get_subjects_dictionary()
             )
             arcadia_subjects_view: str = f'*Arcadia Tags Dictionary*\n\n{arcadia_subjects}'
-        self._socket_network.send_message('chat_message', f'{arcadia_subjects_view}')
+        self._socket_network.send_message(
+            self._network_commons.get_chat_message_category(),
+            f'{arcadia_subjects_view}'
+        )
 
     def _search_arc_data(self, search_term: str) -> None:
         arcadia_summary: str = self._arcadia.get_summary(search_term)
-        self._socket_network.send_message('chat_message', f'{arcadia_summary}')
+        self._socket_network.send_message(
+            self._network_commons.get_chat_message_category(),
+            f'{arcadia_summary}'
+        )
 
     def _add_arc_data(self, add_term: list[str]) -> None:
-        if ArcadiaBotUtils.validate_url(add_term[0]):
+        possible_url: str = add_term[1]
+        tags: str = add_term[0]
+        if ArcadiaBotUtils.validate_url(possible_url):
             arc_package: ItemPackage = {
                 'data_type': ArcadiaDataType.URL,
-                'content': add_term[0],
-                'tags': add_term[1].split(',')
+                'content': possible_url,
+                'tags': tags.split(',')
             }
 
             add_item_result: AddDbItemResponse = self._arcadia.add_item(arc_package)
             if add_item_result['added_item']:
                 self._socket_network.send_message(
-                    'chat_message',
+                    self._network_commons.get_chat_message_category(),
                     f'Added record "{arc_package["content"]}" '
                     f'successfully under [{"".join(f"{tag}, " for tag in arc_package["tags"]).rstrip(", ")}]')
             elif not add_item_result['added_item'] and add_item_result['reason'] == 'item_duplicate':
                 self._socket_network.send_message(
-                    'chat_message',
+                    self._network_commons.get_chat_message_category(),
                     f'Failed to add duplicate record "{arc_package["content"]}"\nRecord already under tags '
                     f'{add_item_result["data"][0][1]}'
                 )
             else:
-                self._socket_network.send_message('chat_message', f'Failed to add record "{arc_package["content"]}" '
-                                                                  f'{ArcadiaBotUtils.arcadia_bot_help_message()}')
+                self._socket_network.send_message(
+                    self._network_commons.get_chat_message_category(),
+                    f'Failed to add record "{arc_package["content"]}" '
+                    f'{ArcadiaBotUtils.arcadia_bot_help_message()}')
         else:
-            data_type_not_found_message: str = f'\nLooks like "{add_term[0]}" is not an acceptable URL.\n' \
+            data_type_not_found_message: str = f'\nLooks like "{possible_url}" is not an acceptable URL.\n' \
                                                f'Please make sure you give a complete URL.\n\n' \
                                                f'{ArcadiaBotUtils.arcadia_bot_help_message()}'
-            self._socket_network.send_message('chat_message', data_type_not_found_message)
+            self._socket_network.send_message(
+                self._network_commons.get_chat_message_category(),
+                data_type_not_found_message
+            )
 
 
 if __name__ == '__main__':
