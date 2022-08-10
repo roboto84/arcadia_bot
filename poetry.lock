@@ -9,13 +9,13 @@ develop = false
 
 [package.dependencies]
 python-dotenv = "^0.15.0"
-willow-core = {git = 'https://github.com/roboto84/willow_core.git', rev = '59d8f44'}
+willow-core = {git = 'https://github.com/roboto84/willow_core.git', rev = '646a99f'}
 
 [package.source]
 type = "git"
 url = 'https://github.com/roboto84/arcadia.git'
-reference = '7447f58'
-resolved_reference = "7447f58c2535bb841bd4b8e1af86f184890c10ab"
+reference = '35b4ace'
+resolved_reference = "35b4ace0a13a76a0487ef28b8d426cb04f61806e"
 
 [[package]]
 name = "atomicwrites"
@@ -161,18 +161,21 @@ test = ["pytest (>=2.2.3)", "flake8 (>=2.4.0)", "isort (>=4.2.2)"]
 
 [[package]]
 name = "wh00t-core"
-version = "0.5.0"
+version = "0.5.1"
 description = 'Core libraries shared amongst the wh00t connected projects'
 category = "main"
 optional = false
 python-versions = '^3.10'
 develop = false
 
+[package.dependencies]
+willow-core = {git = 'https://github.com/roboto84/willow_core.git', rev = '646a99f'}
+
 [package.source]
 type = "git"
 url = 'https://github.com/roboto84/wh00t_core.git'
-reference = 'v0.5.0'
-resolved_reference = "2496591f4a8013cab458e5609532f650941658cd"
+reference = 'v0.5.1'
+resolved_reference = "fd3c4a9e132a860ea881e0704ba19504116725d5"
 
 [[package]]
 name = "willow-core"
@@ -186,13 +189,13 @@ develop = false
 [package.source]
 type = "git"
 url = 'https://github.com/roboto84/willow_core.git'
-reference = '59d8f44'
-resolved_reference = "59d8f44bce1bbda74e6e6d82a179a78f36cdfb3c"
+reference = '646a99f'
+resolved_reference = "646a99fa75cc5902ad8d9c8f1fe3f54c3ed13eb0"
 
 [metadata]
 lock-version = "1.1"
 python-versions = '^3.10'
-content-hash = "7f3df4bd7ba396f1eb7d730cef797d583bf1725505c315fcf2ce9d193a199515"
+content-hash = "45be8a37786621edfc1fb278eca215ec608c705383300ffdda60f38e9d7963cf"
 
 [metadata.files]
 arcadia = []
