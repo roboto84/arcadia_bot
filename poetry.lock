@@ -17,8 +17,8 @@ willow-core = {git = 'https://github.com/roboto84/willow_core.git', rev = '646a9
 [package.source]
 type = "git"
 url = 'https://github.com/roboto84/arcadia.git'
-reference = 'a95a1db'
-resolved_reference = "a95a1db6fc0c7f65f4d51dc8b55f09a8ed865238"
+reference = '8d8d8dc'
+resolved_reference = "8d8d8dcb01e79228f66f41ad66c4f662c79a3732"
 
 [[package]]
 name = "attrs"
@@ -266,7 +266,7 @@ resolved_reference = "646a99fa75cc5902ad8d9c8f1fe3f54c3ed13eb0"
 [metadata]
 lock-version = "1.1"
 python-versions = '^3.10'
-content-hash = "a2acbce074fe9a6519f6223fd4d7ee94cfbd669c5bc79b511b4f98e50bd71565"
+content-hash = "687adb49c04093fcaa7af7129ceb42a109693618278b84699f931d5458a9c1c6"
 
 [metadata.files]
 arcadia = []
