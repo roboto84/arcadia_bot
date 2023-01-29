@@ -9,7 +9,7 @@ python = '^3.10'
 python-dotenv = '^0.15.0'
 validators = '^0.20.0'
 wh00t-core = {git = 'https://github.com/roboto84/wh00t_core.git', tag = 'v0.5.1'}
-arcadia = {git = 'https://github.com/roboto84/arcadia.git', rev = '8d8d8dc'}
+arcadia = {git = 'https://github.com/roboto84/arcadia.git', rev = '74d91ad'}
 
 [tool.poetry.dev-dependencies]
 pytest = '^7.2.0'

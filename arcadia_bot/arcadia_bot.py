@@ -97,6 +97,7 @@ class ArcadiaBot:
             }
 
             add_item_result: AddDbItemResponse = self._arcadia.add_item(arc_package)
+            print(add_item_result['added_item'], add_item_result['reason'])
             if add_item_result['added_item']:
                 self._socket_network.send_message(
                     self._network_commons.get_chat_message_category(),
@@ -107,6 +108,12 @@ class ArcadiaBot:
                     self._network_commons.get_chat_message_category(),
                     f'Failed to add duplicate record "{arc_package["content"]}"\nRecord already under tags '
                     f'{add_item_result["data"][0][1]}'
+                )
+            elif not add_item_result['added_item'] and add_item_result['reason'] == 'empty_string_tag':
+                self._socket_network.send_message(
+                    self._network_commons.get_chat_message_category(),
+                    f'Failed to add record "{arc_package["content"]}"\nLooks like empty string in tags: '
+                    f'{add_item_result["data"]}'
                 )
             else:
                 self._socket_network.send_message(
