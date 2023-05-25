@@ -3,7 +3,9 @@ import os
 import logging.config
 from typing import Any
 
-from arcadia.library.db.db_types import ItemPackage, ArcadiaDataType, AddDbItemResponse
+from arcadia.library.arcadia_types import DataViewType
+from arcadia.library.db.db_types import ItemPackage, ArcadiaDataType
+from willow_core.library.db_types import AddDbItemResponse
 from dotenv import load_dotenv
 from arcadia.library.arcadia import Arcadia
 from arcadia_bot_utils import ArcadiaBotUtils
@@ -16,7 +18,7 @@ class ArcadiaBot:
         self._logger: logging.Logger = logging_object.getLogger(type(self).__name__)
         self._logger.setLevel(logging.INFO)
         self._chat_key: str = '/arc'
-        self._arcadia: Arcadia = Arcadia(logging_object, sql_lite_db_path, True)
+        self._arcadia: Arcadia = Arcadia(logging_object, sql_lite_db_path, DataViewType.TEXT)
         self._socket_network: ClientNetwork = ClientNetwork(socket_host, socket_port, 'arcadia_bot', 'app', logging)
         self._network_commons: NetworkCommons = NetworkCommons()
 
@@ -102,7 +104,7 @@ class ArcadiaBot:
                 self._socket_network.send_message(
                     self._network_commons.get_chat_message_category(),
                     f'Added record "{arc_package["content"]}" '
-                    f'successfully under [{"".join(f"{tag}, " for tag in arc_package["tags"]).rstrip(", ")}]')
+                    f'successfully under [{"".join(f"{tag.lower()}, " for tag in arc_package["tags"]).rstrip(", ")}]')
             elif not add_item_result['added_item'] and add_item_result['reason'] == 'item_duplicate':
                 self._socket_network.send_message(
                     self._network_commons.get_chat_message_category(),
